@@ -11,26 +11,16 @@ from dotenv import load_dotenv
 import requests as requests
 
 load_dotenv()
+users = []
+dm = []
 
-# TOKEN = "OTQ2Njc2MzMyNjM1NTE2OTQ5.YhiLCg.iERMYJG72vb7CesL3SpomM20Xpo"
-# GUILD = "morty's game server"
-
-
-TOKEN = "OTQ4MDk3MDE2OTkzNTc0OTQy.Yh22Jw.OC5rjpru7cuGlDYs5q8W7Xyt5nA"
-GUILD = "Mirror World"
-
-
-MODEL_URL = 'http://8.142.23.250:8081/v1/models/kfserving-custom-model:predict'
+TOKEN = os.getenv('DISCORD_TOKEN')
+GUILD = os.getenv('DISCORD_GUILD')
+MODEL_URL = os.getenv('MODEL_URL')
 logging.critical('Loading Tokenizer...')
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
 logging.critical('Loading Tokenizer Done.')
-
-
-client = discord.Client(proxy="http://127.0.0.1:7890")
-
-
-users = []
-dm = []
+client = discord.Client()
 
 
 @client.event
@@ -47,7 +37,7 @@ async def on_message(message):
     if client.user.mentioned_in(message):
 
         # collector = discord.utils.find(lambda r: r.name == 'Mirror Collector', message.guild.roles)
-        collector = discord.utils.find(lambda r: r.name == 'Mirror Collector', message.guild.roles)
+        collector = discord.utils.find(lambda r: r.name == os.getenv('AVAILABLE_ROLE'), message.guild.roles)
 
         # if User sent more than 5 message today
         if is_user_limited(message.author.id) and collector not in message.author.roles:
@@ -83,7 +73,7 @@ async def on_message(message):
                 user_message_reference = ""
                 print(str(e))
             # Reply user message
-            time.sleep(5)
+            time.sleep(int(os.getenv('AVAILABLE_ROLE')))
             response = get_mirror_model_response(user_message, user_message_reference)
             # response = "Looking Good!"
             await message.reply(response)
@@ -93,10 +83,9 @@ async def on_message(message):
 
 
 def is_user_limited(user_id):
-    users_history = [x for x in users if x['id'] == user_id and x['time'] > datetime.now() - timedelta(hours=24)]
-    # users_history = [x for x in users if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=1)]
+    users_history = [x for x in users if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=int(os.getenv('RESET_RESPONSE_LIMIT_TIME')))]
     print(f"Number of the time user chatted within 1 minutes: {len(users_history)}")
-    if len(users_history) >= 2:
+    if len(users_history) >= int(os.getenv('NUMBER_OF_FREE_RESPONSE')):
         print("User is limited")
         return True
     print("User is not limited")
@@ -104,8 +93,7 @@ def is_user_limited(user_id):
 
 
 def did_user_receive_dm(user_id):
-    users_dm_history = [x for x in dm if x['id'] == user_id and x['time'] > datetime.now() - timedelta(hours=24)]
-    # users_dm_history = [x for x in dm if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=1)]
+    users_dm_history = [x for x in dm if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=int(os.getenv('RESET_RESPONSE_LIMIT_TIME')))]
     print(f"Number of the time user got DM within 1 minutes: {len(users_dm_history)}")
     if len(users_dm_history) >= 1:
         print("User Received DM")
@@ -139,10 +127,7 @@ def tensor_to_string(tensor_object):
 
 def convert_string_to_tensor(string_array):
     _string_to_numpy = np.array(json.loads(string_array))
-    # print(f"str to numpy: {_string_to_numpy}")
-
     _numpy_to_tensor = torch.from_numpy(_string_to_numpy)
-    # print(f"Numpy Back to tensor: {_numpy_to_tensor}")
     return _numpy_to_tensor
 
 
