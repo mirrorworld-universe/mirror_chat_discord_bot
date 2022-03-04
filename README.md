@@ -22,4 +22,12 @@ NUMBER_OF_FREE_RESPONSE=
 RESET_RESPONSE_LIMIT_TIME=
 ```
 
-Run the discordBot.py file, and your bot is live!
+install torch from https://pytorch.org/
+
+Install requirements:
+```shell
+pip install -r requirements.txt
+```
+
+
+Run the `discordBot.py`, and your bot is live!
