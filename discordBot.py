@@ -20,7 +20,7 @@ MODEL_URL = os.getenv('MODEL_URL')
 logging.critical('Loading Tokenizer...')
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
 logging.critical('Loading Tokenizer Done.')
-client = discord.Client()
+client = discord.Client(proxy='http://127.0.0.1:7890')
 
 
 @client.event
@@ -38,6 +38,7 @@ async def on_message(message):
 
         # collector = discord.utils.find(lambda r: r.name == 'Mirror Collector', message.guild.roles)
         collector = discord.utils.find(lambda r: r.name == os.getenv('AVAILABLE_ROLE'), message.guild.roles)
+        print(collector)
 
         # if User sent more than 5 message today
         if is_user_limited(message.author.id) and collector not in message.author.roles:
@@ -73,7 +74,7 @@ async def on_message(message):
                 user_message_reference = ""
                 print(str(e))
             # Reply user message
-            time.sleep(int(os.getenv('AVAILABLE_ROLE')))
+            time.sleep(int(os.getenv('MESSAGE_DELAY')))
             response = get_mirror_model_response(user_message, user_message_reference)
             # response = "Looking Good!"
             await message.reply(response)
