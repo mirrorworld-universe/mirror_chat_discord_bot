@@ -58,7 +58,7 @@ async def on_message(message):
                 # Send Message in Channel
                 await message.channel.send(f"{message.author.mention} {LIMIT_PUBLIC_MESSAGE}")
                 # Send DM to user
-                await message.author.send(DM_MESSAGE)
+                await message.author.send(f"{DM_MESSAGE}")
                 return
 
         # if User didnt finished their daily quota
