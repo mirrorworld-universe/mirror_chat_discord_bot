@@ -20,6 +20,15 @@ NUMBER_OF_FREE_RESPONSE=
 
 # Reset response limit time (Minutes)
 RESET_RESPONSE_LIMIT_TIME=
+
+# Channels bot allowed to send message to
+ALLOWED_CHANNELS='["foo", "bar"]'
+
+# Message that the bot will send as DM to users
+DM_MESSAGE='Hey! This is your DM message!'
+
+# End of limit message
+LIMIT_PUBLIC_MESSAGE='This is your limit message!'
 ```
 
 install torch from https://pytorch.org/

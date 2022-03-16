@@ -16,7 +16,11 @@ dm = []
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+STRICT_BYPASS = os.getenv('STRICT_BYPASS')
 MODEL_URL = os.getenv('MODEL_URL')
+ALLOWED_CHANNELS = json.loads(os.getenv('ALLOWED_CHANNELS'))
+DM_MESSAGE = os.getenv('DM_MESSAGE')
+LIMIT_PUBLIC_MESSAGE = os.getenv('LIMIT_PUBLIC_MESSAGE')
 logging.critical('Loading Tokenizer...')
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
 logging.critical('Loading Tokenizer Done.')
@@ -31,7 +35,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user or message.author.bot:
+    if message.author == client.user or message.author.bot or message.channel.name not in ALLOWED_CHANNELS:
         return
 
     # if bot got mentioned
@@ -50,14 +54,9 @@ async def on_message(message):
                 # add user to daily DMed list
                 dm.append({"id": message.author.id, "time": datetime.now()})
                 # Send Message in Channel
-                await message.channel.send(f"{message.author.mention} Yo! You finished your daily quota! Check DM to "
-                                           f"see how you can continue talking to me!")
+                await message.channel.send(f"{message.author.mention} {LIMIT_PUBLIC_MESSAGE}")
                 # Send DM to user
-                await message.author.send(f"Hey there!\nYou finished your daily quota of talking to me!\nIf you wanna "
-                                          "Enjoy talking to me more, you can purchase a mirror from "
-                                          "here!\nhttps://mirrorworld.fun/buy?section=top&utm_medium=header\n\n\nAlso "
-                                          "note that I'm not gonna send you more messages today and also will delete "
-                                          "all new messages you send me in the server until tomorrow! \nCheers!")
+                await message.author.send(DM_MESSAGE)
                 return
 
         # if User didnt finished their daily quota
@@ -86,21 +85,21 @@ async def on_message(message):
 
 def is_user_limited(user_id):
     users_history = [x for x in users if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=int(os.getenv('RESET_RESPONSE_LIMIT_TIME')))]
-    print(f"Number of the time user chatted within 1 minutes: {len(users_history)}")
+    # print(f"Number of the time user chatted within {os.getenv('RESET_RESPONSE_LIMIT_TIME')} minutes: {len(users_history)}")
     if len(users_history) >= int(os.getenv('NUMBER_OF_FREE_RESPONSE')):
-        print("User is limited")
+        # print("User is limited")
         return True
-    print("User is not limited")
+    # print("User is not limited")
     return False
 
 
 def did_user_receive_dm(user_id):
     users_dm_history = [x for x in dm if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=int(os.getenv('RESET_RESPONSE_LIMIT_TIME')))]
-    print(f"Number of the time user got DM within 1 minutes: {len(users_dm_history)}")
+    # print(f"Number of the time user got DM within {os.getenv('RESET_RESPONSE_LIMIT_TIME')} minutes: {len(users_dm_history)}")
     if len(users_dm_history) >= 1:
-        print("User Received DM")
+        # print("User Received DM")
         return True
-    print("User did not receive DM")
+    # print("User did not receive DM")
     return False
 
 
