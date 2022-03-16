@@ -25,8 +25,8 @@ LIMIT_PUBLIC_MESSAGE = os.getenv('LIMIT_PUBLIC_MESSAGE')
 logging.critical('Loading Tokenizer...')
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
 logging.critical('Loading Tokenizer Done.')
-client = discord.Client(proxy='http://127.0.0.1:7890')
-# client = discord.Client()
+# client = discord.Client(proxy='http://127.0.0.1:7890')
+client = discord.Client()
 
 
 @client.event
