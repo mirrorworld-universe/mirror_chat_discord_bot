@@ -18,14 +18,15 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 STRICT_BYPASS = os.getenv('STRICT_BYPASS')
 MODEL_URL = os.getenv('MODEL_URL')
+AVAILABLE_ROLES = json.loads(os.getenv('AVAILABLE_ROLES'))
 ALLOWED_CHANNELS = json.loads(os.getenv('ALLOWED_CHANNELS'))
 DM_MESSAGE = os.getenv('DM_MESSAGE')
 LIMIT_PUBLIC_MESSAGE = os.getenv('LIMIT_PUBLIC_MESSAGE')
 logging.critical('Loading Tokenizer...')
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
 logging.critical('Loading Tokenizer Done.')
-# client = discord.Client(proxy='http://127.0.0.1:7890')
-client = discord.Client()
+client = discord.Client(proxy='http://127.0.0.1:7890')
+# client = discord.Client()
 
 
 @client.event
@@ -40,13 +41,14 @@ async def on_message(message):
 
     # if bot got mentioned
     if client.user.mentioned_in(message):
+        _roles = []
+        for role in AVAILABLE_ROLES:
+            _roles.append(discord.utils.find(lambda r: r.name == role, message.guild.roles))
 
-        # collector = discord.utils.find(lambda r: r.name == 'Mirror Collector', message.guild.roles)
-        collector = discord.utils.find(lambda r: r.name == os.getenv('AVAILABLE_ROLE'), message.guild.roles)
-        print(collector)
+        _role_check = any(item in _roles for item in message.author.roles)
 
         # if User sent more than 5 message today
-        if is_user_limited(message.author.id) and collector not in message.author.roles:
+        if is_user_limited(message.author.id) and not _role_check:
             # Delete the message
             await message.delete()
             # if bot didnt DM the user today
@@ -62,7 +64,7 @@ async def on_message(message):
         # if User didnt finished their daily quota
         else:
             # Add append user to the daily list if user is not a collector
-            if collector not in message.author.roles:
+            if not _role_check:
                 users.append({"id": message.author.id, "time": datetime.now()})
             # Assign users message
             user_message = message.clean_content

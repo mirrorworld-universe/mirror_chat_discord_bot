@@ -10,7 +10,7 @@ DISCORD_GUILD=
 MODEL_URL=
 
 # The role which can freely talk without any limit
-AVAILABLE_ROLE=
+AVAILABLE_ROLES='["Foo", "Bar"]'
 
 # amount of time each response will take (Seconds)
 MESSAGE_DELAY=
