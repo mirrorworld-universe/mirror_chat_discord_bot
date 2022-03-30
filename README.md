@@ -46,7 +46,7 @@ Run the `discordBot.py`, and your bot is live!
 1. build the docker image using command bellow and please replace the variables to your desired values.
 
 ```shell
-docker build .
+docker build -t "<Tag:Version>" .
 ```
 
 2. run the docker image.
