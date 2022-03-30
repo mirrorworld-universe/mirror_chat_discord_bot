@@ -40,3 +40,16 @@ pip install -r requirements.txt
 
 
 Run the `discordBot.py`, and your bot is live!
+
+## docker build
+
+1. build the docker image using command bellow and please replace the variables to your desired values.
+
+```shell
+docker build .
+```
+
+2. run the docker image.
+```shell
+docker run --name <image-name> -e DISCORD_TOKEN='asdawda' -e DISCORD_GUILD='asdfs' -e MODEL_URL='adwwadw' -e AVAILABLE_ROLES='["Foo", "Bar"]' -e MESSAGE_DELAY=10 -e NUMBER_OF_FREE_RESPONSE=10 -e RESET_RESPONSE_LIMIT_TIME=12345 -e ALLOWED_CHANNELS='["foo", "bar"]' -e DM_MESSAGE='Hey! This is your DM message!' -e LIMIT_PUBLIC_MESSAGE='This is your limit message!' -d <image-name-tag>
+```
