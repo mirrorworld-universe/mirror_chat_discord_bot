@@ -16,6 +16,7 @@ dm = []
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+STATUS = os.getenv('PLAYING_STATUS')
 STRICT_BYPASS = os.getenv('STRICT_BYPASS')
 MODEL_URL = os.getenv('MODEL_URL')
 AVAILABLE_ROLES = json.loads(os.getenv('AVAILABLE_ROLES'))
@@ -25,13 +26,15 @@ LIMIT_PUBLIC_MESSAGE = os.getenv('LIMIT_PUBLIC_MESSAGE')
 logging.critical('Loading Tokenizer...')
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
 logging.critical('Loading Tokenizer Done.')
-client = discord.Client(proxy='http://127.0.0.1:7890')
-# client = discord.Client()
+# client = discord.Client(proxy='http://127.0.0.1:7890')
+client = discord.Client()
 
 
 @client.event
 async def on_ready():
     print(f'{client.user.name} has connected to Discord!')
+    game = discord.Game(STATUS)
+    await client.change_presence(status=discord.Status.online, activity=game)
 
 
 @client.event
