@@ -29,6 +29,9 @@ DM_MESSAGE='Hey! This is your DM message!'
 
 # End of limit message
 LIMIT_PUBLIC_MESSAGE='This is your limit message!'
+
+# Status of the bot for Playing...
+PLAYING_STATUS='BOM'
 ```
 
 install torch from https://pytorch.org/
