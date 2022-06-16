@@ -28,8 +28,9 @@ TRIGGER_LIST = json.loads(os.getenv('TRIGGER_LIST'))
 logging.critical('Loading Tokenizer...')
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
 logging.critical('Loading Tokenizer Done.')
-client = discord.Client(proxy='http://127.0.0.1:7890')
-# client = discord.Client()
+# client = discord.Client(proxy='http://127.0.0.1:7890')
+client = discord.Client()
+
 
 @client.event
 async def on_ready():
@@ -38,13 +39,15 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=game)
 
 
+
+
 @client.event
 async def on_message(message):
     if message.author == client.user or message.author.bot or message.channel.id not in ALLOWED_CHANNELS:
         return
 
     # if bot got mentioned or trigger word found
-    if client.user.mentioned_in(message) or any(trigger in message.clean_content.lower() for trigger in trigger_list):
+    if client.user.mentioned_in(message) or any(trigger in message.clean_content.lower() for trigger in TRIGGER_LIST):
         _roles = []
         for role in AVAILABLE_ROLES:
             _roles.append(discord.utils.find(lambda r: r.id == role, message.guild.roles))
@@ -81,6 +84,9 @@ async def on_message(message):
                 print(str(e))
             # Reply user message
             time.sleep(int(os.getenv('MESSAGE_DELAY')))
+
+            # Replace gm to good morning for better understanding
+            user_message = user_message.replace("gm", "good morning")
             response = get_mirror_model_response(user_message, user_message_reference)
             # response = "Looking Good!"
             await message.reply(response)
