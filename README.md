@@ -10,7 +10,7 @@ DISCORD_GUILD=
 MODEL_URL=
 
 # The role which can freely talk without any limit
-AVAILABLE_ROLES='["Foo", "Bar"]'
+AVAILABLE_ROLES='["959435164545591231", "1241257182471212"]'
 
 # amount of time each response will take (Seconds)
 MESSAGE_DELAY=
@@ -22,7 +22,7 @@ NUMBER_OF_FREE_RESPONSE=
 RESET_RESPONSE_LIMIT_TIME=
 
 # Channels bot allowed to send message to
-ALLOWED_CHANNELS='["foo", "bar"]'
+ALLOWED_CHANNELS='["959435164545591231", "1241257182471212"]'
 
 # Message that the bot will send as DM to users
 DM_MESSAGE='Hey! This is your DM message!'
@@ -32,6 +32,11 @@ LIMIT_PUBLIC_MESSAGE='This is your limit message!'
 
 # Status of the bot for Playing...
 PLAYING_STATUS='BOM'
+
+# List of keywords which will trigger the bot to reply to
+TRIGGER_LIST='["gm", "get", "hello", "good morning", "good afternoon", "how is everyone", "weather", "hot", "cold", "up to", "market"]'
+
+
 ```
 
 install torch from https://pytorch.org/
@@ -54,5 +59,5 @@ docker build -t "<Tag:Version>" .
 
 2. run the docker image.
 ```shell
-docker run --name <image-name> -e DISCORD_TOKEN='asdawda' -e DISCORD_GUILD='asdfs' -e MODEL_URL='adwwadw' -e AVAILABLE_ROLES='["Foo", "Bar"]' -e MESSAGE_DELAY=10 -e NUMBER_OF_FREE_RESPONSE=10 -e RESET_RESPONSE_LIMIT_TIME=12345 -e ALLOWED_CHANNELS='["foo", "bar"]' -e DM_MESSAGE='Hey! This is your DM message!' -e LIMIT_PUBLIC_MESSAGE='This is your limit message!' -d <image-name-tag>
+docker run --name <image-name> -e DISCORD_TOKEN='asdawda' -e DISCORD_GUILD='asdfs' -e MODEL_URL='adwwadw' -e AVAILABLE_ROLES='["Foo", "Bar"]' -e MESSAGE_DELAY=10 -e NUMBER_OF_FREE_RESPONSE=10 -e RESET_RESPONSE_LIMIT_TIME=12345 -e ALLOWED_CHANNELS='["foo", "bar"]' -e DM_MESSAGE='Hey! This is your DM message!' -e LIMIT_PUBLIC_MESSAGE='This is your limit message!' -e TRIGGER_LIST='["gm"]' -d <image-name-tag>
 ```
