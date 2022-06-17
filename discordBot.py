@@ -44,9 +44,8 @@ async def on_ready():
     game = discord.Game(STATUS)
     await client.change_presence(status=discord.Status.online, activity=game)
     while True:
-        random_time = random.randrange(10, 15)
+        random_time = random.randrange(600, 900)
         chosen_random_message = random.choice(PRE_RANDOM_MESSAGE_LIST)
-        # random_time = random.randrange(600, 900)
         channel = client.get_channel(int(RANDOM_MESSAGE_CHANNEL))
         await channel.send(generate_random_message(chosen_random_message))
         await asyncio.sleep(random_time)
