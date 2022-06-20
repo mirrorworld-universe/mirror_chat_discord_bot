@@ -36,6 +36,11 @@ PLAYING_STATUS='BOM'
 # List of keywords which will trigger the bot to reply to
 TRIGGER_LIST='["gm", "get", "hello", "good morning", "good afternoon", "how is everyone", "weather", "hot", "cold", "up to", "market"]'
 
+# Min random interval to send random message to channel (Seconds)
+MIN_RANDOM_TIME_MESSAGE = 1800
+
+# Max random interval to send random message to channel (Seconds)
+MAX_RANDOM_TIME_MESSAGE = 3600
 
 ```
 
