@@ -22,13 +22,6 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=game)
     while True:
         random_time = random.randrange(Config.MIN_RANDOM_TIME_MESSAGE, Config.MAX_RANDOM_TIME_MESSAGE)
-        chosen_random_message = random.choice(Config.PRE_RANDOM_MESSAGE_LIST)
-        channel = client.get_channel(int(Config.RANDOM_MESSAGE_CHANNEL))
-        response = Pegasus(Config.PEGASUS_SATO_NODE).generate_response(chosen_random_message)
-
-        if response != "":
-            await channel.send(response)
-
         await asyncio.sleep(random_time)
 
 
@@ -71,8 +64,6 @@ async def on_message(message):
 
             # Replace gm to good morning for better understanding
             user_message = user_message.replace("gm", "good morning")
-            # TODO: should use which node?
-            print("USE NODE: " + Config.ALLOWED_CHANNELS[str(message.channel.id)])
             response = Pegasus(Config.ALLOWED_CHANNELS[str(message.channel.id)]).generate_response(user_message)
 
             print(response)

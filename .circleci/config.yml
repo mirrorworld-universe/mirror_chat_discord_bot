@@ -20,8 +20,12 @@ jobs:
             export SERVICE_VERSION=$(git rev-list --count HEAD) &&
             export SERVICE_NAME=mirror-chat-discord-bot &&
             cd ~/Infrastructure/production &&
-            kubectl patch --local -f ${SERVICE_NAME}-deployment.yaml -p "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${SERVICE_NAME}\",\"image\":\"${DOCKER_REGISTRY}/${SERVICE_NAME}:${SERVICE_VERSION}\"}]}}}}" -o yaml > ${SERVICE_NAME}-deployment.yaml.new &&
-            mv ${SERVICE_NAME}-deployment.yaml.new ${SERVICE_NAME}-deployment.yaml &&
+            kubectl patch --local -f ${SERVICE_NAME}-sato-deployment.yaml -p "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${SERVICE_NAME}\",\"image\":\"${DOCKER_REGISTRY}/${SERVICE_NAME}:${SERVICE_VERSION}\"}]}}}}" -o yaml > ${SERVICE_NAME}-sato-deployment.yaml.new &&
+            mv ${SERVICE_NAME}-sato-deployment.yaml.new ${SERVICE_NAME}-sato-deployment.yaml &&
+            kubectl patch --local -f ${SERVICE_NAME}-zagan-deployment.yaml -p "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${SERVICE_NAME}\",\"image\":\"${DOCKER_REGISTRY}/${SERVICE_NAME}:${SERVICE_VERSION}\"}]}}}}" -o yaml > ${SERVICE_NAME}-zagan-deployment.yaml.new &&
+            mv ${SERVICE_NAME}-zagan-deployment.yaml.new ${SERVICE_NAME}-zagan-deployment.yaml &&
+            kubectl patch --local -f ${SERVICE_NAME}-byrne-deployment.yaml -p "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${SERVICE_NAME}\",\"image\":\"${DOCKER_REGISTRY}/${SERVICE_NAME}:${SERVICE_VERSION}\"}]}}}}" -o yaml > ${SERVICE_NAME}-byrne-deployment.yaml.new &&
+            mv ${SERVICE_NAME}-byrne-deployment.yaml.new ${SERVICE_NAME}-byrne-deployment.yaml &&
             git add . &&
             git commit -m "bump ${SERVICE_NAME} to ${SERVICE_VERSION}";
             git push
