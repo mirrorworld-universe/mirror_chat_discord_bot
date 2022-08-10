@@ -1,6 +1,7 @@
 import os
 import time
 import discord
+import logging
 from dotenv import load_dotenv
 from Pegasus import Pegasus
 from config import Config
@@ -8,11 +9,12 @@ from config import Config
 load_dotenv()
 
 client = discord.Client()
+logging.basicConfig(level=logging.DEBUG)
 
 
 @client.event
 async def on_ready():
-    print(f'{client.user.name} has connected to Discord!')
+    logging.info('%s has connected to Discord!', client.user.name)
     game = discord.Game(Config.STATUS)
     await client.change_presence(status=discord.Status.online, activity=game)
 
@@ -32,7 +34,7 @@ async def on_message(message):
         user_message = user_message.replace("gm", "good morning")
         response = Pegasus(Config.ALLOWED_CHANNELS[str(message.channel.id)]).generate_response(user_message)
 
-        print(response)
+        logging.info(response)
         if response != "":
             # response = "Looking Good!"
             await message.reply(response)
@@ -45,7 +47,7 @@ async def on_message(message):
 
 @client.event
 async def on_error(event, *args, **kwargs):
-    print(repr(event))
+    logging.error(repr(event))
     global client
     client = discord.Client()
 

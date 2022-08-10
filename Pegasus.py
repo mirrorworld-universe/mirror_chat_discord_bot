@@ -1,4 +1,5 @@
 import requests
+import logging
 from config import Config
 
 
@@ -16,5 +17,5 @@ class Pegasus:
 
             return data.json()['data'][0]['text']
         except Exception as e:
-            print(repr(e))
+            logging.error(repr(e))
             return ""
