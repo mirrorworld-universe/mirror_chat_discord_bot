@@ -1,16 +1,11 @@
-import asyncio
 import os
-import random
 import time
 import discord
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from Pegasus import Pegasus
 from config import Config
 
 load_dotenv()
-users = []
-dm = []
 
 client = discord.Client()
 
@@ -48,33 +43,10 @@ async def on_message(message):
         raise discord.DiscordException
 
 
-def is_user_limited(user_id):
-    users_history = [x for x in users if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=int(os.getenv('RESET_RESPONSE_LIMIT_TIME')))]
-    # print(f"Number of the time user chatted within {os.getenv('RESET_RESPONSE_LIMIT_TIME')} minutes: {len(users_history)}")
-    if len(users_history) >= int(os.getenv('NUMBER_OF_FREE_RESPONSE')):
-        # print("User is limited")
-        return True
-    # print("User is not limited")
-    return False
-
-
-def did_user_receive_dm(user_id):
-    users_dm_history = [x for x in dm if x['id'] == user_id and x['time'] > datetime.now() - timedelta(minutes=int(os.getenv('RESET_RESPONSE_LIMIT_TIME')))]
-    # print(f"Number of the time user got DM within {os.getenv('RESET_RESPONSE_LIMIT_TIME')} minutes: {len(users_dm_history)}")
-    if len(users_dm_history) >= 1:
-        # print("User Received DM")
-        return True
-    # print("User did not receive DM")
-    return False
-
-
 @client.event
 async def on_error(event, *args, **kwargs):
-    with open('err.log', 'a') as f:
-        if event == 'on_message':
-            f.write(f'Unhandled message: {args[0]}\n')
-        else:
-            raise
-
+    print(repr(event))
+    global client
+    client = discord.Client()
 
 client.run(Config.TOKEN)
