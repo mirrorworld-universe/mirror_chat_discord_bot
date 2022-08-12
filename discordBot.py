@@ -9,7 +9,7 @@ from config import Config
 load_dotenv()
 
 client = discord.Client()
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 @client.event
