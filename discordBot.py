@@ -1,7 +1,10 @@
 import os
 import time
+from typing import Callable, Tuple, Any, Dict, Coroutine
 import discord
 import logging
+import functools
+import asyncio
 from dotenv import load_dotenv
 from Pegasus import Pegasus
 from config import Config
@@ -10,6 +13,19 @@ load_dotenv()
 
 client = discord.Client()
 logging.basicConfig(level=logging.INFO)
+
+
+def to_thread(func: Callable) -> Callable[[Tuple[Any, ...], Dict[str, Any]], Coroutine[Any, Any, Any]]:
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        return await asyncio.to_thread(func, *args, **kwargs)
+    return wrapper
+
+
+@to_thread
+def generate_response(node_id, user_message):
+    response = Pegasus(node_id).generate_response(user_message)
+    return response
 
 
 @client.event
@@ -32,7 +48,8 @@ async def on_message(message):
 
         # Replace gm to good morning for better understanding
         user_message = user_message.replace("gm", "good morning")
-        response = Pegasus(Config.ALLOWED_CHANNELS[str(message.channel.id)]).generate_response(user_message)
+        node_id = Config.ALLOWED_CHANNELS[str(message.channel.id)]
+        response = await generate_response(node_id, user_message)
 
         logging.info(response)
         if response != "":
