@@ -44,14 +44,14 @@ async def on_message(message):
     if client.user.mentioned_in(message) or any(trigger in message.clean_content.lower() for trigger in Config.TRIGGER_LIST):
         # Assign users message
         user_message = message.clean_content
-        time.sleep(int(os.getenv('MESSAGE_DELAY')))
 
         # Replace gm to good morning for better understanding
         user_message = user_message.replace("gm", "good morning")
+        logging.info("user message: " + user_message)
         node_id = Config.ALLOWED_CHANNELS[str(message.channel.id)]
         response = await generate_response(node_id, user_message)
+        logging.info("response: " + response)
 
-        logging.info(response)
         if response != "":
             # response = "Looking Good!"
             await message.reply(response)
