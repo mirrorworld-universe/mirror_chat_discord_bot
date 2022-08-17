@@ -65,7 +65,5 @@ async def on_message(message):
 @client.event
 async def on_error(event, *args, **kwargs):
     logging.error(repr(event))
-    global client
-    client = discord.Client()
 
 client.run(Config.TOKEN)
