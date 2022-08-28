@@ -19,7 +19,7 @@ jobs:
             git clone https://joze144:${GITHUB_PASSWORD}@github.com/mirrorworld-universe/Infrastructure.git ~/Infrastructure &&
             export SERVICE_VERSION=$(git rev-list --count HEAD) &&
             export SERVICE_NAME=mirror-chat-discord-bot &&
-            cd ~/Infrastructure/production &&
+            cd ~/Infrastructure/staging &&
             kubectl patch --local -f ${SERVICE_NAME}-sato-deployment.yaml -p "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${SERVICE_NAME}-sato\",\"image\":\"${DOCKER_REGISTRY}/${SERVICE_NAME}:${SERVICE_VERSION}\"}]}}}}" -o yaml > ${SERVICE_NAME}-sato-deployment.yaml.new &&
             mv ${SERVICE_NAME}-sato-deployment.yaml.new ${SERVICE_NAME}-sato-deployment.yaml &&
             kubectl patch --local -f ${SERVICE_NAME}-zagan-deployment.yaml -p "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${SERVICE_NAME}-zagan\",\"image\":\"${DOCKER_REGISTRY}/${SERVICE_NAME}:${SERVICE_VERSION}\"}]}}}}" -o yaml > ${SERVICE_NAME}-zagan-deployment.yaml.new &&

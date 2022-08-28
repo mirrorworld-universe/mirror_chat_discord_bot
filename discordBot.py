@@ -1,5 +1,3 @@
-import os
-import time
 from typing import Callable, Tuple, Any, Dict, Coroutine
 import discord
 import logging
@@ -10,9 +8,11 @@ from Pegasus import Pegasus
 from config import Config
 
 load_dotenv()
-
-client = discord.Client()
 logging.basicConfig(level=logging.INFO)
+
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 
 def to_thread(func: Callable) -> Callable[[Tuple[Any, ...], Dict[str, Any]], Coroutine[Any, Any, Any]]:
